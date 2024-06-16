@@ -1,7 +1,8 @@
-use actix::{Actor};
+use actix::Actor;
 use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Error};
 use actix::prelude::*;
 use actix_web_actors::ws;
+use actix_files as fs;
 //use tokio::stream;
 
 // Esto fue una primera prueba de conexión con el servidor
@@ -54,6 +55,7 @@ async fn ruta_del_chat(req: HttpRequest, stream: web::Payload) -> Result<HttpRes
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
+            .service(fs::Files::new("/", "./static").index_file("index.html"))
             .route("/ws", web::get().to(ruta_del_chat))
     })
         .bind("127.0.0.1:5000")?
