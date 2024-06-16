@@ -23,19 +23,19 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WebSocket {
     fn handle(
         &mut self,
         msg: Result<ws::Message, ws::ProtocolError>,
-        ctx: &mut Self::Context,
+        context: &mut Self::Context,
     ) {
         match msg {
             Ok(ws::Message::Ping(msg)) => {
                 println!("Ping recibido: {:?}", msg);
-                ctx.pong(&msg)
+                context.pong(&msg)
             },
             Ok(ws::Message::Text(text)) => {
                 println!("Mensaje de texto recibido: {:?}", text);
             },
             Ok(ws::Message::Binary(bin)) => {
                 println!("Datos binarios recibidos");
-                ctx.binary(bin)
+                context.binary(bin)
             },
             Err(e) => println!("Error: {:?}", e),
             _ => (),
