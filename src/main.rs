@@ -22,13 +22,13 @@ impl Actor for WebSocket {
 impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WebSocket {
     fn handle(
         &mut self,
-        msg: Result<ws::Message, ws::ProtocolError>,
+        message: Result<ws::Message, ws::ProtocolError>,
         context: &mut Self::Context,
     ) {
-        match msg {
-            Ok(ws::Message::Ping(msg)) => {
-                println!("Ping recibido: {:?}", msg);
-                context.pong(&msg)
+        match message {
+            Ok(ws::Message::Ping(message)) => {
+                println!("Ping recibido: {:?}", message);
+                context.pong(&message)
             },
             Ok(ws::Message::Text(text)) => {
                 println!("Mensaje de texto recibido: {:?}", text);
