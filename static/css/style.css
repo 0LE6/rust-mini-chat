@@ -4,15 +4,27 @@
     margin-top: 20px;
     height: 300px;
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.message {
+    padding: 10px 20px;
+    border-radius: 25px;        
+    max-width: 60%;
+    word-wrap: break-word;
 }
 
 .sent {
-    color: green;
-    text-align: right;
+    background-color: #C1E1C1; /* verde  claro pastel */
+    align-self: flex-end;
+    color: black;
 }
 
 .received {
-    color: navy;
-    text-align: left;
+    background-color: #add8e6; /* azul claro pastel */
+    align-self: flex-start;
+    color: black;
 }
 

@@ -16,7 +16,8 @@ async fn main() -> std::io::Result<()> {
             .service(fs::Files::new("/", "./static").index_file("index.html"))
             .route("/ws", web::get().to(websocket::ruta_del_chat))
     })
-        .bind("127.0.0.1:5000")?
+        // .bind("127.0.0.1:5000")?
+        .bind("0.0.0.0:5000")?
         .run()
         .await
 }

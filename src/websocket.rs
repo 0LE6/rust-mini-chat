@@ -7,12 +7,14 @@ use actix_web::{web, Error, HttpRequest, HttpResponse};
 
 pub struct WebSocket {
     sessions: HashSet<Addr<WebSocket>>,
+    username: Option<String>
 }
 
 impl WebSocket {
     pub fn new() -> Self {
         WebSocket {
             sessions: HashSet::new(),
+            username: None
         }
     }
 }
@@ -52,21 +54,25 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for WebSocket {
     ) {
         match msg {
             Ok(ws::Message::Text(text)) => {
-                println!("Message received: {:?}", text);
-                let message = MyWebSocketMessage(text.to_string()); // Convert ByteString to String
+                let username = self.username.clone().unwrap_or_else(|| "Anónimo".to_string());
+                let formatted_message = format!("{}: {}", username, text);
+                let message = MyWebSocketMessage(formatted_message);
                 for session in &self.sessions {
-                    if *session != ctx.address() {
-                        let _ = session.do_send(message.clone()); // Send MyWebSocketMessage
-                    }
+                    let _ = session.do_send(message.clone());
                 }
             },
             Ok(ws::Message::Ping(msg)) => {
+                // Responde a los pings con pongs
                 ctx.pong(&msg)
             },
             Ok(ws::Message::Binary(bin)) => {
+                // Maneja datos binarios si es necesario
                 ctx.binary(bin)
             },
-            Err(e) => println!("Error: {:?}", e),
+            Err(e) => {
+                // Imprime los errores
+                println!("Error: {:?}", e);
+            },
             _ => (),
         }
     }
